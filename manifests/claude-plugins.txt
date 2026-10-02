@@ -1,0 +1,3 @@
+# claude plugin install <plugin@marketplace>
+deck-factory@deck-factory
+watch@claude-video

@@ -1,0 +1,129 @@
+스킬	분류	하네스	별도 도구
+copywriting	글쓰기·마케팅	common	
+eli5	글쓰기·마케팅	common	
+humanize-korean	글쓰기·마케팅	codex	
+im-not-strange-ai	글쓰기·마케팅	claude	
+im-not-strange-ai-fast	글쓰기·마케팅	claude	
+im-not-strange-ai-redo	글쓰기·마케팅	claude	
+landing-page	글쓰기·마케팅	common	
+pricing-page	글쓰기·마케팅	common	
+seo-audit	글쓰기·마케팅	common	
+full-output-enforcement	문서·유틸	common	
+pdf	문서·유틸	common	
+screenshot	문서·유틸	common	
+codex-ppt	발표·슬라이드	codex	
+slides-grab	발표·슬라이드	common	Node.js (slides-grab)
+slides-grab-card-news	발표·슬라이드	common	Node.js (slides-grab)
+slides-grab-design	발표·슬라이드	common	Node.js (slides-grab)
+slides-grab-export	발표·슬라이드	common	Node.js (slides-grab)
+slides-grab-html	발표·슬라이드	common	Node.js (slides-grab)
+slides-grab-image	발표·슬라이드	common	Node.js (slides-grab)
+slides-grab-plan	발표·슬라이드	common	Node.js (slides-grab)
+slideshow	발표·슬라이드	common	Node.js (npx hyperframes)
+council	사고·토론	claude / codex 각자 버전	
+elevenlabs-tts	영상·모션	common	ElevenLabs API 키
+embedded-captions	영상·모션	common	Node.js (npx hyperframes)
+faceless-explainer	영상·모션	common	Node.js (npx hyperframes)
+figma	영상·모션	common	Node.js (npx hyperframes)
+general-video	영상·모션	common	Node.js (npx hyperframes)
+hyperframes	영상·모션	common	Node.js (npx hyperframes)
+hyperframes-animation	영상·모션	common	Node.js (npx hyperframes)
+hyperframes-audio	영상·모션	common	Node.js (npx hyperframes)
+hyperframes-cli	영상·모션	common	Node.js (npx hyperframes)
+hyperframes-core	영상·모션	common	Node.js (npx hyperframes)
+hyperframes-creative	영상·모션	common	Node.js (npx hyperframes)
+hyperframes-keyframes	영상·모션	common	Node.js (npx hyperframes)
+hyperframes-registry	영상·모션	common	Node.js (npx hyperframes)
+hyperframes-studio	영상·모션	common	Node.js (npx hyperframes)
+hypit	영상·모션	codex	Hypit CLI
+media-use	영상·모션	common	Node.js (npx hyperframes)
+motion-graphics	영상·모션	common	Node.js (npx hyperframes)
+music-to-video	영상·모션	common	Node.js (npx hyperframes)
+pireel	영상·모션	common	Pireel 계정 + MCP
+product-launch-video	영상·모션	common	Node.js (npx hyperframes)
+talking-head-recut	영상·모션	common	Node.js (npx hyperframes)
+tesseract-motion	영상·모션	common	Tesseract CLI(tsrct) + 라이선스
+tesseract-video	영상·모션	common	Tesseract CLI(tsrct) + 라이선스
+agency-grid-layout-minimal	웹디자인	common	
+animation-on-scroll	웹디자인	common	
+animation-systems	웹디자인	common	
+animation-vocabulary	웹디자인	common	
+apple-design	웹디자인	common	
+atmosphere-background	웹디자인	common	
+background-grid-webgl	웹디자인	common	
+beautiful-shadows	웹디자인	common	
+blue-cloudy-clean-modern	웹디자인	common	
+blue-laser-clean-glass-layout	웹디자인	common	
+book-serif-index	웹디자인	common	
+bright-green-tech-system-webgl	웹디자인	common	
+cinematic-gsap-lenis-motion-system	웹디자인	common	
+cinematic-scroll-storytelling	웹디자인	common	
+clean-minimal-beige-light-mode	웹디자인	common	
+cobejs	웹디자인	common	
+container-lines	웹디자인	common	
+corner-diagonals	웹디자인	common	
+corner-lasers	웹디자인	common	
+css-alpha-masking	웹디자인	common	
+css-border-gradient	웹디자인	common	
+dark-blue-contrasting-clean	웹디자인	common	
+dark-glass-clean-layout	웹디자인	common	
+design-first-ui-prompting	웹디자인	common	
+design-taste-frontend	웹디자인	common	
+dither-background	웹디자인	common	
+dither-laser-dark-mode	웹디자인	common	
+editorial-tech	웹디자인	common	
+emil-design-eng	웹디자인	common	
+framed-grid-layout	웹디자인	common	
+framed-tech-dark-border-gradient	웹디자인	common	
+frontend-design	웹디자인	common	
+frontend-skill	웹디자인	codex	
+funky-purple-container-tech	웹디자인	common	
+glass-dark-mode-clock	웹디자인	common	
+glass-dark-ui	웹디자인	common	
+globe-gl	웹디자인	common	
+globe-particles	웹디자인	common	
+gooey-blob-system	웹디자인	common	
+gpt-taste	웹디자인	common	
+gsap	웹디자인	common	
+gsap-scrolltrigger-storytelling	웹디자인	common	
+high-contrast-skeuomorphic-clean	웹디자인	common	
+high-end-visual-design	웹디자인	common	
+html-to-interaction-prompts	웹디자인	common	
+image-first-grid-layout	웹디자인	common	
+image-to-code	웹디자인	common	
+impeccable	웹디자인	common	
+industrial-brutalist-ui	웹디자인	common	
+light-mode-paper-technical	웹디자인	common	
+marquee-loop	웹디자인	common	
+masked-reveal	웹디자인	common	
+matterjs	웹디자인	common	
+mesh-gradient-dark-blue-clean	웹디자인	common	
+minimalist-ui	웹디자인	common	
+nested-container-clean-agency	웹디자인	common	
+nested-container-frames	웹디자인	common	
+number-details	웹디자인	common	
+orange-clean-paper-saas	웹디자인	common	
+progressive-blur	웹디자인	common	
+redesign-existing-projects	웹디자인	common	
+skeuomorphic-ui	웹디자인	common	
+split-layout-technical	웹디자인	common	
+staggered-word-reveal	웹디자인	common	
+stitch-design-taste	웹디자인	common	
+stitched-full-page-capture	웹디자인	common	
+tailwindcss	웹디자인	common	
+tech-green-dark-mode-modern	웹디자인	common	
+technical-wireframe-info-layout	웹디자인	common	
+threejs	웹디자인	common	
+unicorn-studio	웹디자인	common	
+vantajs	웹디자인	common	
+video-to-superprompt	웹디자인	common	
+webgl-3d-object	웹디자인	common	
+webgl-landing-steering	웹디자인	common	
+webgl-laser	웹디자인	common	
+aura-asset-images	이미지	common	
+codex-imagegen	이미지	claude	codex CLI
+company-logos	이미지	common	
+gpt-image-2-style-library	이미지	common	
+image-prompt	이미지	common	
+solar-duotone-bold	이미지	common	
+unsplash-asset-images	이미지	common	

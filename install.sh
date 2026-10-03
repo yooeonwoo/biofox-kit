@@ -9,6 +9,7 @@ set -uo pipefail
 KIT_ROOT="$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")" >/dev/null && pwd -P)"
 KIT_LINK="$HOME/.biofox-kit"                  # stable path; the wiki skill reads the wiki through it
 LEDGER="$HOME/.biofox-kit.installed"          # what this installer created: "<path>\t<fingerprint>"
+JOURNAL="$LEDGER.journal"                     # entries of a run in progress; folded into the ledger at exit (or by the next run)
 MARK=".biofox-kit"                            # marker file placed inside copied directories
 CLAUDE_DIR="${CLAUDE_CONFIG_DIR:-$HOME/.claude}"
 CODEX_DIR="${CODEX_HOME:-$HOME/.codex}"
@@ -79,6 +80,8 @@ esac
 # Git Bash turns `ln -s` into a plain copy unless Developer Mode is on, so copy explicitly there.
 if [[ $IS_WINDOWS -eq 1 && $MODE_SET -eq 0 ]]; then MODE="copy"; fi
 
+conflict_msg() { printf '%s' "$KIT_ROOT/knowledge 에서 직접 고친 노트가 새 버전과 겹쳐 충돌이 남아 있습니다. 'git -C $KIT_ROOT status' 로 겹친 파일을 확인해 정리한 뒤 다시 실행하세요. (내 수정본은 git stash 에 보관돼 있습니다)"; }
+
 # ---------- update: pull, then run the freshly pulled installer ----------
 if [[ $UPDATE -eq 1 ]]; then
   has git || die "git 이 필요합니다."
@@ -87,13 +90,14 @@ if [[ $UPDATE -eq 1 ]]; then
     log "would reset skills/ agents/ manifests/ and run git pull in $KIT_ROOT"
   else
     log "updating $KIT_ROOT"
+    [[ -z "$(git -C "$KIT_ROOT" ls-files -u 2>/dev/null)" ]] || die "$(conflict_msg)"
     # skills/ agents/ manifests/ belong to the kit: some tools rewrite their own skill folder through the symlink
     # (e.g. `npx hyperframes skills update`), which would block the pull. Reset those; notes added under knowledge/ are kept.
     git -C "$KIT_ROOT" checkout -q -- skills agents manifests 2>/dev/null || true
     git -C "$KIT_ROOT" clean -fdq -- skills agents manifests 2>/dev/null || true
     git -C "$KIT_ROOT" pull --ff-only --autostash || die "git pull 실패. 네트워크와 저장소 접근 권한을 확인하세요."
     if [[ -n "$(git -C "$KIT_ROOT" ls-files -u 2>/dev/null)" ]]; then
-      die "새 버전을 받았지만, $KIT_ROOT/knowledge 에서 직접 고친 노트가 새 버전과 겹쳐 충돌이 남았습니다. 'git -C $KIT_ROOT status' 로 겹친 파일을 확인해 정리한 뒤 install.sh 를 다시 실행하세요. (내 수정본은 git stash 에 보관돼 있습니다)"
+      die "새 버전은 받았습니다. $(conflict_msg)"
     fi
   fi
   NEXT_ARGS=()
@@ -123,12 +127,17 @@ GONE=$'\001gone'
 file_sum() { cksum < "$1" | awk '{print $1}'; }
 dir_sum()  { ( cd "$1" 2>/dev/null && find . -type f ! -name "$MARK" -exec cksum {} + | LC_ALL=C sort | cksum | awk '{print $1}' ); }
 ledger_load() {
-  local path sum
-  [[ -f "$LEDGER" ]] || return 0
-  while IFS=$'\t' read -r path sum || [[ -n "$path" ]]; do
-    [[ -n "$path" ]] || continue
-    L_PATH+=("$path"); L_SUM+=("$sum")
-  done < "$LEDGER"
+  local path sum f
+  for f in "$LEDGER" "$JOURNAL"; do
+    [[ -f "$f" ]] || continue
+    while IFS=$'\t' read -r path sum || [[ -n "$path" ]]; do
+      [[ -n "$path" ]] || continue
+      [[ "$sum" == "!gone" ]] && sum="$GONE"
+      L_PATH+=("$path"); L_SUM+=("$sum")
+    done < "$f"
+  done
+  if [[ -f "$JOURNAL" ]]; then L_DIRTY=1; fi      # a previous run was killed before it could save
+  return 0
 }
 ledger_index() {  # ledger_index <path>: sets LEDGER_I to the newest live entry; rc 1 if absent
   local i=${#L_PATH[@]}
@@ -141,8 +150,8 @@ ledger_index() {  # ledger_index <path>: sets LEDGER_I to the newest live entry;
   done
   return 1
 }
-record()   { dry && return 0; L_PATH+=("$1"); L_SUM+=("$2");    L_DIRTY=1; }   # record <path> <fingerprint>
-unrecord() { dry && return 0; L_PATH+=("$1"); L_SUM+=("$GONE"); L_DIRTY=1; }
+record()   { dry && return 0; L_PATH+=("$1"); L_SUM+=("$2");    L_DIRTY=1; printf '%s\t%s\n' "$1" "$2"    >> "$JOURNAL" 2>/dev/null || true; }   # record <path> <fingerprint>
+unrecord() { dry && return 0; L_PATH+=("$1"); L_SUM+=("$GONE"); L_DIRTY=1; printf '%s\t%s\n' "$1" "!gone" >> "$JOURNAL" 2>/dev/null || true; }
 ledger_save() {  # newest entry per path wins; removed entries are dropped
   [[ $L_DIRTY -eq 1 ]] || return 0
   local i=${#L_PATH[@]} j dup kept_p=() kept_s=()
@@ -161,6 +170,7 @@ ledger_save() {  # newest entry per path wins; removed entries are dropped
     [[ "${kept_s[$i]}" == "$GONE" ]] || printf '%s\t%s\n' "${kept_p[$i]}" "${kept_s[$i]}" >> "$LEDGER.tmp"
   done
   if [[ -s "$LEDGER.tmp" ]]; then mv "$LEDGER.tmp" "$LEDGER"; else rm -f "$LEDGER.tmp" "$LEDGER"; fi
+  rm -f "$JOURNAL"
   L_DIRTY=0
 }
 trap ledger_save EXIT
@@ -285,7 +295,10 @@ prune_stale() {  # prune_stale <harness> <skills|agents> <root>: remove what an 
     name="${p#"$root"/}"
     kit_has "$h" "$kind" "$name" && continue
     if [[ -e "$p" || -L "$p" ]]; then
-      owned_by_kit "$p" || continue
+      if ! owned_by_kit "$p"; then
+        dry || log "남겨 둠: $p (키트에서는 빠졌지만 직접 고친 내용이 있음)"
+        unrecord "$p"; continue
+      fi
       if dry; then log "would remove $p (키트에서 빠진 항목)"; continue; fi
       remove_path "$p" || continue
       log "정리: $p (키트에서 빠진 항목)"
@@ -365,22 +378,30 @@ TXT
   printf '%s\n' "$BLOCK_END"
 }
 strip_block() {  # strip_block <file>: remove our block; refuses to touch a file whose markers do not pair up. Preserves symlinks/perms.
-  local f="$1" starts ends trim=0
+  local f="$1" starts ends trim=0 cr=$'\r' last
+  local s1="$BLOCK_START -->" s2="$BLOCK_START nonl -->"
   [[ -f "$f" ]] || return 0
-  starts="$(grep -cF -- "$BLOCK_START" "$f")"
+  # markers count only as whole lines, so a sentence that merely mentions them is not mistaken for a block
+  starts="$(grep -cE -- "^${BLOCK_START}( nonl)? -->${cr}?\$" "$f")"
   [[ "$starts" -gt 0 ]] || return 0
-  ends="$(grep -cF -- "$BLOCK_END" "$f")"
+  ends="$(grep -cE -- "^${BLOCK_END}${cr}?\$" "$f")"
   if [[ "$starts" -ne "$ends" ]]; then
     warn "$f 의 안내 블록 시작·끝 표시가 짝이 맞지 않아 건드리지 않습니다 (직접 정리 필요)"
     return 1
   fi
   if dry; then log "would remove instruction block from $f"; return 0; fi
-  # we added the final newline ourselves only if the start marker says so and nothing was written after the block
-  if grep -qF -- "$BLOCK_START nonl -->" "$f" && [[ "$(tail -n 1 "$f")" == "$BLOCK_END" ]]; then trim=1; fi
-  awk -v s="$BLOCK_START" -v e="$BLOCK_END" '
+  # awk always ends its output with a newline. Take it back off when the original did not have one:
+  #   - the file has no final newline right now (the user wrote after the block without one), or
+  #   - the block is the last thing in the file and its start marker says we added the newline ourselves.
+  last="$(tail -n 1 "$f")"; last="${last%$cr}"
+  if [[ -n "$(tail -c 1 "$f")" ]]; then trim=1
+  elif [[ "$last" == "$BLOCK_END" ]] && grep -qE -- "^${s2}${cr}?\$" "$f"; then trim=1; fi
+  awk -v s1="$s1" -v s2="$s2" -v e="$BLOCK_END" '
+    function same(a, b) { return index(a, b) == 1 && length(a) == length(b) }
     function flush() { if (held) { print ""; held = 0 } }
-    skipping { if (index($0, e)) skipping = 0; next }
-    index($0, s) { held = 0; skipping = 1; next }      # drops the one separator blank line we put before the block
+    { line = $0; sub(/\r$/, "", line) }
+    skipping { if (same(line, e)) skipping = 0; next }
+    same(line, s1) || same(line, s2) { held = 0; skipping = 1; next }   # drops the one separator blank line we put before the block
     /^$/ { flush(); held = 1; next }
     { flush(); print }
     END { flush(); if (skipping) exit 2 }' "$f" > "$f.kit.tmp" || { rm -f "$f.kit.tmp"; warn "$f 의 안내 블록을 안전하게 걷어낼 수 없어 그대로 둡니다"; return 1; }
@@ -411,15 +432,23 @@ append_block() {  # append_block <file>
 
 # ---------- uninstall ----------
 do_uninstall() {
-  local h cur
+  local h cur doc p i=0 n
   detect_targets
   for h in ${TARGETS[@]+"${TARGETS[@]}"}; do
     remove_owned_under "$(skills_root_for "$h")"
     remove_owned_under "$(agents_root_for "$h")"
     case "$h" in
-      claude) strip_block "$CLAUDE_DIR/CLAUDE.md" || true ;;
-      codex)  strip_block "$CODEX_DIR/AGENTS.md" || true ;;
+      claude) doc="$CLAUDE_DIR/CLAUDE.md" ;;
+      codex)  doc="$CODEX_DIR/AGENTS.md" ;;
     esac
+    strip_block "$doc" || true
+    if ledger_index "$doc"; then unrecord "$doc"; fi   # whatever is left in that file now belongs to the user
+  done
+  n=${#L_PATH[@]}
+  while [[ $i -lt $n ]]; do                            # entries whose target has disappeared
+    p="${L_PATH[$i]}"
+    if [[ ! -e "$p" && ! -L "$p" ]] && ledger_index "$p" && [[ $LEDGER_I -eq $i ]]; then unrecord "$p"; fi
+    i=$((i + 1))
   done
   if [[ -L "$KIT_LINK" ]]; then
     cur="$(readlink "$KIT_LINK")"

@@ -463,6 +463,21 @@ do_uninstall() {
   else ok "제거 완료. Claude 플러그인(deck-factory, watch)과 키트 폴더($KIT_ROOT)는 그대로 두었습니다."; fi
 }
 
+# ---------- bootstrap: `curl -fsSL .../install.sh | bash` has no kit next to it, so fetch one ----------
+KIT_REPO="https://github.com/yooeonwoo/biofox-kit.git"
+if ! looks_like_kit "$KIT_ROOT" && [[ $UNINSTALL -eq 0 ]]; then
+  if looks_like_kit "$KIT_LINK"; then
+    [[ -d "$KIT_LINK/.git" ]] && ! dry && has git && { log "updating $KIT_LINK"; git -C "$KIT_LINK" pull -q --ff-only --autostash || warn "git pull 실패 — 지금 있는 버전으로 설치합니다"; }
+  else
+    has git || die "git 이 필요합니다. https://git-scm.com 에서 설치한 뒤 다시 실행하세요."
+    [[ -e "$KIT_LINK" ]] && die "$KIT_LINK 가 이미 있는데 이 키트가 아닙니다. 그 폴더를 옮기고 다시 실행하세요."
+    if dry; then log "would git clone $KIT_REPO $KIT_LINK"; exit 0; fi
+    log "downloading kit -> $KIT_LINK"
+    git clone -q "$KIT_REPO" "$KIT_LINK" || die "저장소를 받지 못했습니다: $KIT_REPO"
+  fi
+  exec "${BASH:-/bin/bash}" "$KIT_LINK/install.sh" ${ORIG_ARGS[@]+"${ORIG_ARGS[@]}"}
+fi
+
 # ---------- main ----------
 ledger_load
 if [[ $UNINSTALL -eq 1 ]]; then do_uninstall; exit 0; fi

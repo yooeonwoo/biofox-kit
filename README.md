@@ -4,17 +4,19 @@ BIOFOX 직원용 AI 키트. 각자의 **Claude Code · Codex** 에 스킬과 BIO
 
 ## 설치 (한 줄)
 
-터미널(Windows는 Git Bash)에 붙여 넣는다.
+터미널(Windows는 Git Bash)에 붙여 넣는다. 계정이나 로그인은 필요 없다. git 만 있으면 된다.
 
 ```bash
-git clone https://github.com/yooeonwoo/biofox-kit.git ~/.biofox-kit && ~/.biofox-kit/install.sh
+curl -fsSL https://raw.githubusercontent.com/yooeonwoo/biofox-kit/main/install.sh | bash
 ```
 
-설치가 끝나면 Claude Code / Codex 를 새로 연다.
+키트가 `~/.biofox-kit` 에 받아지고 바로 설치된다. 끝나면 Claude Code / Codex 를 새로 연다.
 
-- 비공개 저장소라 GitHub 계정이 이 저장소에 초대되어 있어야 한다. 처음이면 `gh auth login` 으로 로그인한다.
 - Claude Code 와 Codex 중 설치된 것을 자동으로 찾는다. 둘 다 있으면 둘 다에 설치한다.
 - 같은 이름의 스킬을 이미 갖고 있으면 **덮어쓰지 않고 건너뛴다.**
+- 같은 한 줄을 다시 실행하면 최신 버전으로 갱신된다.
+
+직접 받아서 설치해도 된다: `git clone https://github.com/yooeonwoo/biofox-kit.git ~/.biofox-kit && ~/.biofox-kit/install.sh`
 
 ## 들어 있는 것
 
@@ -54,8 +56,9 @@ git clone https://github.com/yooeonwoo/biofox-kit.git ~/.biofox-kit && ~/.biofox
 ## 넣지 않은 것
 
 개발용 스킬(코드 리뷰·배포·디버깅·gstack·oh-my-codex 등), 개인용 스킬, 원작자가 직접 만든 스킬은 들어 있지 않다.
-지식 위키에서는 개인 메모, 회의 녹음 전사, 강의 원본 전사, 사이드 프로젝트, 앱 개발 내부 노트를 뺐다.
+라이선스 표기가 없거나 자체 설치기가 있는 도구(Tesseract, Hypit, Pireel, open-design, Figma)는 [`manifests/external-tools.md`](manifests/external-tools.md) 의 명령으로 따로 설치한다.
+지식 위키에서는 개인 메모, 회의 녹음 전사, 강의 원본 전사, 사이드 프로젝트, 가격·원가, 계약·인사, 앱 개발 내부 노트를 뺐다.
 
 ## 출처
 
-스킬은 외부 공개 저장소에서 온 것이다. 출처와 라이선스는 [`NOTICE.md`](NOTICE.md). 사내 사용 목적의 묶음이므로 외부로 재배포하지 않는다.
+스킬은 외부 공개 저장소에서 가져와 묶은 것이다. 출처는 [`NOTICE.md`](NOTICE.md), 라이선스 전문은 [`licenses/`](licenses/). 각 스킬은 원래의 라이선스를 따른다.

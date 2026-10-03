@@ -1,6 +1,6 @@
 # 키트 인벤토리
 
-빌드: 2026-10-02
+빌드: 2026-10-03
 
 ## 포함된 스킬
 
@@ -91,7 +91,6 @@
 | 웹디자인 | `number-details` | Claude+Codex |  | Add decorative 01, 02, 03 numeric detail markers. |
 | 웹디자인 | `orange-clean-paper-saas` | Claude+Codex |  | Create a clean paper-toned SaaS design system with warm neutrals, orange accent signals, rounded premium forms, and poli |
 | 문서·유틸 | `pdf` | Claude+Codex |  | Use when tasks involve reading, creating, or reviewing PDF files where rendering and layout matter; prefer visual checks |
-| 영상·모션 | `pireel` | Claude+Codex | Pireel 계정 + MCP | Edit talking-head videos in Pireel Studio through the `pireel` MCP server — first-run connect/setup, transcript-based cu |
 | 글쓰기·마케팅 | `pricing-page` | Claude+Codex |  | Use when designing or rewriting a high-converting SaaS pricing page (structure, plan design, copywriting, SEO/AEO, FAQs, |
 | 영상·모션 | `product-launch-video` | Claude+Codex | Node.js (npx hyperframes) | Turn a product or marketing URL, pasted script, or brief into a product launch / promo video — SaaS promos, feature reve |
 | 웹디자인 | `progressive-blur` | Claude+Codex |  | Create a layered CSS progressive blur (top or bottom) using multiple backdrop-filter masks for depth and softness. Use w |
@@ -116,8 +115,6 @@
 | 영상·모션 | `talking-head-recut` | Claude+Codex | Node.js (npx hyperframes) | Package an existing talking-head / interview / podcast video with timed, designed GRAPHIC OVERLAY cards — kinetic titles |
 | 웹디자인 | `tech-green-dark-mode-modern` | Claude+Codex |  | Create a modern dark-mode technical design system with matte-black surfaces, emerald signal accents, mono system labelin |
 | 웹디자인 | `technical-wireframe-info-layout` | Claude+Codex |  | Create a monochrome technical wireframe design system with exploded 3D structure, connector annotations, sparse informat |
-| 영상·모션 | `tesseract-motion` | Claude+Codex | Tesseract CLI(tsrct) + 라이선스 | Create editable motion graphics locally in Tesseract, including full-frame animated scenes, typography, diagrams, lower  |
-| 영상·모션 | `tesseract-video` | Claude+Codex | Tesseract CLI(tsrct) + 라이선스 | Edit existing footage into finished videos locally with Tesseract. Make cuts, preserve dialogue, add purposeful sound de |
 | 웹디자인 | `threejs` | Claude+Codex |  | Use when building or debugging interactive 3D scenes on the web with Three.js (scene/camera/renderer, lights/materials,  |
 | 웹디자인 | `unicorn-studio` | Claude+Codex |  | Use when embedding and customizing Unicorn Studio interactive animations on the web (embed, responsive sizing, performan |
 | 이미지 | `unsplash-asset-images` | Claude+Codex |  | Use when you need to pick high-quality Unsplash images for product/design assets (avatars, headshots, portraits, large w |
@@ -135,7 +132,6 @@
 | 사고·토론 | `council` | Codex |  | Convene the Council of High Intelligence in Codex when the user asks for /council, council deliberation, triads, duo deb |
 | 웹디자인 | `frontend-skill` | Codex |  | Use when the task asks for a visually strong landing page, website, app, prototype, demo, or game UI. This skill enforce |
 | 글쓰기·마케팅 | `humanize-korean` | Codex |  | AI(ChatGPT·Claude·Gemini)가 쓴 한글 텍스트를 사람이 쓴 글처럼 윤문한다. 번역투·영어 인용 과다·기계적 병렬·관용구·피동 남용·접속사 남발·리듬 균일·이모지/불릿 과다 등 10대 카테고리 40+ |
-| 영상·모션 | `hypit` | Codex | Hypit CLI | Make, adapt, and revise videos with Hypit from references or briefs, including SVML/SVS/SVRun authoring, project compone |
 
 ## 에이전트
 
@@ -153,7 +149,7 @@
 |---|---|
 | 개발 관련 | 105 |
 | 직접 제작 | 19 |
-| 자체 설치 도구(키트 밖) | 12 |
+| 자체 설치 도구(키트 밖) | 16 |
 | 기준 밖 판단 제외 | 6 |
 | 개인·사이드 프로젝트 | 5 |
 | 스킬 아님 | 1 |
@@ -164,16 +160,16 @@
 
 | 위치 | 노트 수 |
 |---|---|
-| `03 Resources/Brands` | 23 |
+| `03 Resources/Brands` | 21 |
 | `50 Wiki/AI` | 5 |
 | `50 Wiki/BIOFOX LLM Wiki Index.md` | 1 |
 | `50 Wiki/MOC - BIOFOX 바이오폭스.md` | 1 |
 | `50 Wiki/MOC - 피부과학.md` | 1 |
-| `50 Wiki/마케팅` | 58 |
-| `50 Wiki/바이오폭스` | 180 |
+| `50 Wiki/마케팅` | 55 |
+| `50 Wiki/바이오폭스` | 174 |
 | `50 Wiki/비즈니스` | 2 |
 | `50 Wiki/피부과학` | 1743 |
-| `60 Synthesis` | 15 |
+| `60 Synthesis` | 14 |
 | `70 Output` | 3 |
 
-합계 2032건. 개인 메모, 회의 녹음 전사, 강의 원본 전사, 계약·보상·인사, 예산·견적, 앱 개발 내부 노트는 넣지 않았다.
+합계 2020건. 개인 메모, 회의 녹음 전사, 강의 원본 전사, 계약·보상·인사, 예산·견적, 앱 개발 내부 노트는 넣지 않았다.
